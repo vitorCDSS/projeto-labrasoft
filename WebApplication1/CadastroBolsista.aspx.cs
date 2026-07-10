@@ -21,7 +21,7 @@ namespace WebApplication1
         {
             new Bolsista
             {
-                Nome = "Ana Beatriz Souza",
+               Nome = "Ana Beatriz Souza",
                 CPF = "123.456.789-01",
                 Matricula = "2024001",
                 DataNascimento = new DateTime(2002, 3, 15),
@@ -31,25 +31,25 @@ namespace WebApplication1
             {
                 Nome = "Bruno Henrique Lima",
                 CPF = "234.567.890-12",
-                Matricula = "2024002",
-                DataNascimento = new DateTime(2001, 7, 22),
+               Matricula = "2024002",
+               DataNascimento = new DateTime(2001, 7, 22),
                 Sexo = "Masculino"
             },
             new Bolsista
-            {
-                Nome = "Carla Mendes Oliveira",
-                CPF = "345.678.901-23",
-                Matricula = "2024003",
-                DataNascimento = new DateTime(2003, 1, 10),
+           {
+                 Nome = "Carla Mendes Oliveira",
+                 CPF = "345.678.901-23",
+                 Matricula = "2024003",
+                 DataNascimento = new DateTime(2003, 1, 10),
                 Sexo = "Feminino"
-            },
+             },
             new Bolsista
             {
                 Nome = "Diego Santos Ferreira",
                 CPF = "456.789.012-34",
                 Matricula = "2024004",
                 DataNascimento = new DateTime(2000, 11, 5),
-                Sexo = "Mmasculino"
+                Sexo = "Masculino"
             },
             new Bolsista
             {
@@ -68,8 +68,12 @@ namespace WebApplication1
                 gvAlunos.DataSource = listaBolsista;
                 gvAlunos.DataBind();
                 gvAlunos.Visible = true;
+                botoes.Visible = true;
             }
-            else { gvAlunos.Visible = false; }
+            else {
+                gvAlunos.Visible = false;
+                botoes.Visible = false;
+            }
             
         }
         protected void Btn_salvar(object sender, EventArgs e)
@@ -114,6 +118,23 @@ namespace WebApplication1
         protected void Btn_Limpar(object sender, EventArgs e)
         {
             Limpar();
+        }
+
+        protected void Btn_Filtrar(object sender, EventArgs e)
+        {
+            gvAlunos.DataSource = listaBolsista.Where(x => x.Sexo == "Feminino").ToList();
+            gvAlunos.DataBind();
+        }
+
+        protected void Btn_Ordenar(object sender, EventArgs e)
+        {
+            gvAlunos.DataSource = listaBolsista.OrderBy(x => x.Nome).ToList();
+            gvAlunos.DataBind();
+        }
+        protected void Btn_Desfazer_Alteracoes(object sender, EventArgs e)
+        {
+            gvAlunos.DataSource = listaBolsista;
+            gvAlunos.DataBind();
         }
     }
 }
