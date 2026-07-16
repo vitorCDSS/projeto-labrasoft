@@ -33,13 +33,13 @@ namespace WebApplication1
         protected global::System.Web.UI.WebControls.TextBox txtcpf;
 
         /// <summary>
-        /// Controle txttitulação.
+        /// Controle ddltitulacao.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txttitulação;
+        protected global::System.Web.UI.WebControls.DropDownList ddltitulacao;
 
         /// <summary>
         /// Controle txtareadeatuacao.
@@ -94,6 +94,15 @@ namespace WebApplication1
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel botoes;
+
+        /// <summary>
+        /// Controle txtFiltro.
+        /// </summary>
+        /// <remarks>
+        /// Campo gerado automaticamente.
+        /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFiltro;
 
         /// <summary>
         /// Controle btn_filtrar.

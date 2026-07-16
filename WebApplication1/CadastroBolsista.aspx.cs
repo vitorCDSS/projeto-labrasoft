@@ -96,6 +96,7 @@ namespace WebApplication1
                 lblMensagem.Text = $"salvo com sucesso {salvo} {idade}";
                 lblMensagem.ForeColor = System.Drawing.Color.DarkGreen;
                 Limpar();
+                Response.Redirect("CadastroBolsista.aspx");
 
             }
             catch (Exception)

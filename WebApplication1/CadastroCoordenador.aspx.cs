@@ -42,7 +42,7 @@ namespace WebApplication1
 
                 coordenador.Nome = txtnome.Text;
                 coordenador.CPF = txtcpf.Text;
-                coordenador.Titulação = txttitulação.Text;
+                coordenador.Titulação = ddltitulacao.SelectedValue;
                 coordenador.AreaDeAtuação = txtareadeatuacao.Text;
                 coordenador.Email = txtemail.Text;
                 listaCoordenador.Add(coordenador);
@@ -65,7 +65,7 @@ namespace WebApplication1
         {
             txtnome.Text = "";
             txtcpf.Text = "";
-            txttitulação.Text = "";
+            ddltitulacao.SelectedIndex = 0;
             txtareadeatuacao.Text = "";
             txtemail.Text = "";
         }
@@ -73,6 +73,21 @@ namespace WebApplication1
         protected void Btn_Limpar(object sender, EventArgs e)
         {
             Limpar();
+        }
+
+
+
+        protected void Btn_Filtrar(object sender, EventArgs e)
+        {
+            string filtro = txtFiltro.Text.Trim();
+
+            var resultado = listaCoordenador.Where(x =>
+                 x.Nome.Contains(filtro) ||
+                 x.Titulação.Contains(filtro)
+             ).ToList();
+
+            gvcoordenador.DataSource = resultado;
+            gvcoordenador.DataBind();
         }
     }
 }
