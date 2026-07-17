@@ -17,12 +17,12 @@ namespace WebApplication1
                 Mostrar_Lista();
             }
         }
-        private static List<Coordenador> listaCoordenador = new List<Coordenador>();
+        
         protected void Mostrar_Lista()
         {
-            if (listaCoordenador.Count > 0)
+            if (Repositorio.listaCoordenador.Count > 0)
             {
-                gvcoordenador.DataSource = listaCoordenador;
+                gvcoordenador.DataSource = Repositorio.listaCoordenador;
                 gvcoordenador.DataBind();
                 gvcoordenador.Visible = true;
                 botoes.Visible = true;
@@ -45,7 +45,7 @@ namespace WebApplication1
                 coordenador.Titulação = ddltitulacao.SelectedValue;
                 coordenador.AreaDeAtuação = txtareadeatuacao.Text;
                 coordenador.Email = txtemail.Text;
-                listaCoordenador.Add(coordenador);
+                Repositorio.listaCoordenador.Add(coordenador);
                 Mostrar_Lista();
 
                 lblMensagem.Text = $"salvo com sucesso";
@@ -81,7 +81,7 @@ namespace WebApplication1
         {
             string filtro = txtFiltro.Text.Trim();
 
-            var resultado = listaCoordenador.Where(x =>
+            var resultado = Repositorio.listaCoordenador.Where(x =>
                  x.Nome.Contains(filtro) ||
                  x.Titulação.Contains(filtro)
              ).ToList();

@@ -22,7 +22,15 @@
             <a href="CadastroBolsista.aspx">
                 cadastro de bolsistas
             </a>
-            
+             | 
+             <a href="CadastroCoordenador.aspx">
+                 cadastro de coordenadores
+             </a>
+              | 
+             <a href="CadastroProjeto.aspx">
+                 projetos
+             </a>
+          
         </nav>
         <div>
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">

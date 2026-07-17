@@ -116,14 +116,12 @@
 
    </div>
                  </div>
+                 <asp:Button ID="btn_ordenar" runat="server" CssClass="btn btn_ligth btn-lg w-100 border border-secondary border-2 mt-3" Text="ordem alfabetica" />
+ <asp:Button ID="btn_desfazer_alteracoes" runat="server" CssClass="btn btn-secondary btn-lg w-100 mt-3" Style="background-color:#cc6666; border-color:#cc6666; color:white" Text="desfazer alterações"/>
+                 <hr />
             </asp:Panel>
+                            
              
-                  <asp:Button ID="btn_ordenar" runat="server" CssClass="btn btn_ligth btn-lg w-100 border border-secondary border-2 mt-3" Text="ordem alfabetica" />
-                  <asp:Button ID="btn_desfazer_alteracoes" runat="server" CssClass="btn btn-secondary btn-lg w-100 mt-3" Style="background-color:#cc6666; border-color:#cc6666; color:white" Text="desfazer alterações"/>
-
-              
-              
-              <hr />
     <div class="table-responsive shadow rounded">
         <asp:GridView ID="gvcoordenador" runat="server"
             AutoGenerateColumns="true"
@@ -131,6 +129,5 @@
         </asp:GridView>
     </div>
     
-</div>
 </div>
 </asp:Content>

@@ -17,55 +17,13 @@ namespace WebApplication1
                 Mostrar_Lista();
             }
         }
-        private static List<Bolsista> listaBolsista = new List<Bolsista>()
-        {
-            new Bolsista
-            {
-               Nome = "Ana Beatriz Souza",
-                CPF = "123.456.789-01",
-                Matricula = "2024001",
-                DataNascimento = new DateTime(2002, 3, 15),
-                Sexo = "Feminino"
-            },
-            new Bolsista
-            {
-                Nome = "Bruno Henrique Lima",
-                CPF = "234.567.890-12",
-               Matricula = "2024002",
-               DataNascimento = new DateTime(2001, 7, 22),
-                Sexo = "Masculino"
-            },
-            new Bolsista
-           {
-                 Nome = "Carla Mendes Oliveira",
-                 CPF = "345.678.901-23",
-                 Matricula = "2024003",
-                 DataNascimento = new DateTime(2003, 1, 10),
-                Sexo = "Feminino"
-             },
-            new Bolsista
-            {
-                Nome = "Diego Santos Ferreira",
-                CPF = "456.789.012-34",
-                Matricula = "2024004",
-                DataNascimento = new DateTime(2000, 11, 5),
-                Sexo = "Masculino"
-            },
-            new Bolsista
-            {
-                Nome = "Eduarda Costa Almeida",
-                CPF = "567.890.123-45",
-                Matricula = "2024005",
-                DataNascimento = new DateTime(2002, 9, 28),
-                Sexo = "Feminino"
-            }
-        };
+        
 
         protected void Mostrar_Lista()
         {
-            if (listaBolsista.Count > 0)
+            if (Repositorio.listaBolsista.Count > 0)
             {
-                gvAlunos.DataSource = listaBolsista;
+                gvAlunos.DataSource = Repositorio.listaBolsista;
                 gvAlunos.DataBind();
                 gvAlunos.Visible = true;
                 botoes.Visible = true;
@@ -87,7 +45,7 @@ namespace WebApplication1
                 aluno.Matricula = txtmatricula.Text;
                 aluno.DataNascimento = DateTime.Parse(txtdata.Text);
                 aluno.Sexo = ddlSexo.SelectedValue;
-                listaBolsista.Add(aluno);
+                Repositorio.listaBolsista.Add(aluno);
                 Mostrar_Lista();
 
                 string salvo = aluno.ObterResumo();
@@ -123,18 +81,18 @@ namespace WebApplication1
 
         protected void Btn_Filtrar(object sender, EventArgs e)
         {
-            gvAlunos.DataSource = listaBolsista.Where(x => x.Sexo == "Feminino").ToList();
+            gvAlunos.DataSource = Repositorio.listaBolsista.Where(x => x.Sexo == "Feminino").ToList();
             gvAlunos.DataBind();
         }
 
         protected void Btn_Ordenar(object sender, EventArgs e)
         {
-            gvAlunos.DataSource = listaBolsista.OrderBy(x => x.Nome).ToList();
+            gvAlunos.DataSource = Repositorio.listaBolsista.OrderBy(x => x.Nome).ToList();
             gvAlunos.DataBind();
         }
         protected void Btn_Desfazer_Alteracoes(object sender, EventArgs e)
         {
-            gvAlunos.DataSource = listaBolsista;
+            gvAlunos.DataSource = Repositorio.listaBolsista;
             gvAlunos.DataBind();
         }
     }
