@@ -5,9 +5,12 @@
             <div class="container mt-5">
                
     
-    <div class="card shadow-sm border-2">
-        <div class="card-header border-3 bg-primary text-white">
-            <h3 class="mb-3">Criação de projetos</h3>
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white rounded-top-4">
+            <h3 class="mb-0">
+                <i class="bi bi-folder-plus"></i>
+                Cadastro de Projetos
+            </h3>
         </div>
         
         <div class="card-body bg-light">
@@ -72,8 +75,8 @@
             </div>
             <hr />
             <div class="mb-3 d-grid gap-2">
-                <asp:Button ID="btn_salvar" runat="server" CssClass="btn btn-success btn-lg w-100" Text="concluir" OnClick="Btn_salvar" />
-                <asp:Button ID="btn_limpar" runat="server" CssClass="btn btn-lg w-100" Style="background-color:#cc6666; border-color:#cc6666; color:white;" Text="desfazer formulário" OnClick="Btn_Limpar" />
+                <asp:Button ID="btn_salvar" runat="server" CssClass="btn btn-success btn-lg w-100 rounded-3 shadow-sm" Text="concluir" OnClick="Btn_salvar" />
+                <asp:Button ID="btn_limpar" runat="server" CssClass="btn btn-danger btn-lg w-100 rounded-3 shadow-sm" Text="desfazer formulário" OnClick="Btn_Limpar" />
             </div>
             
             
@@ -87,27 +90,116 @@
    
               <asp:Panel runat="server" ID="botoes">
                   <hr />
-                   <div class="card-body bg-ligth mb-3 d-grid gap-2">
+                   <div class="mt-5">
 
- </div>
-                   <h3 class="card-title text-dark mb-3">Projetos criados:</h3>
-                  <div class="d-flex gap-2">
-                      <asp:Button ID="btn_filtrar" runat="server" CssClass="btn btn-ligth btn-lg w-100 border border-secondary border-2" Text="filtrar" OnClick="Btn_Filtrar" />
-                      <asp:Button ID="btn_ordenar" runat="server" CssClass="btn btn_ligth btn-lg w-100 border border-secondary border-2" Text="ordem alfabetica" OnClick="Btn_Ordenar" />
-                  </div>
-                  
-                  <asp:Button ID="btn_desfazer_alteracoes" runat="server" CssClass="btn btn-secondary btn-lg w-100 mt-3" Style="background-color:#cc6666; border-color:#cc6666; color:white" Text="desfazer alterações" OnClick="Btn_Desfazer_Alteracoes" />
+    <div class="row align-items-end g-2 mb-3">
 
+        <div class="col-md-9">
+            <label class="form-label fw-bold">
+                Buscar por título, área ou coordenador
+            </label>
+
+            <asp:TextBox
+                ID="txtFiltroProjeto"
+                runat="server"
+                CssClass="form-control"
+                placeholder="Ex.: Sistema, ADS, João...">
+            </asp:TextBox>
+
+        </div>
+
+
+        <div class="col-md-3 d-grid">
+
+            <asp:Button
+                ID="btn_filtrarProjeto"
+                runat="server"
+                CssClass="btn btn-primary"
+                Text="🔍 Filtrar"
+                OnClick="Btn_FiltrarProjeto" />
+
+        </div>
+
+    </div>
+
+
+    <asp:Button 
+        ID="btn_ordenar"
+        runat="server"
+        CssClass="btn btn-outline-primary btn-lg w-100 mt-3"
+        Text="Ordem alfabética"
+        OnClick="Btn_Ordenar" />
+
+
+    <asp:Button 
+        ID="btn_desfazer_alteracoes"
+        runat="server"
+        CssClass="btn btn-danger btn-lg w-100 mt-3"
+        Text="Desfazer alterações"
+        OnClick="Btn_Desfazer_Alteracoes" />
+
+
+    <hr />
+
+</div>
               </asp:Panel>
               
               
-    <div class="table-responsive shadow rounded">
-        <asp:GridView ID="gvProjetos" runat="server"
-            AutoGenerateColumns="true"
-            CssClass="table table-striped table-hover table-bordered mb-0 align-middle">
-        </asp:GridView>
-    </div>
-    
+<div class="table-responsive shadow rounded">
+    <asp:GridView ID="gvProjetos"
+    runat="server"
+    AutoGenerateColumns="false"
+    OnRowCommand="gvProjetos_RowCommand"
+    CssClass="table table-hover align-middle mt-3 shadow-sm"
+    HeaderStyle-CssClass="table-primary">
+
+    <Columns>
+
+        <asp:BoundField DataField="Titulo" HeaderText="Título" />
+        <asp:BoundField DataField="VerbaAprovada" HeaderText="Verba Aprovada" />
+        <asp:BoundField DataField="ValorDaBolsa" HeaderText="Valor da Bolsa" />
+        <asp:BoundField DataField="AreaDeConhecimento" HeaderText="Área" />
+
+        <asp:TemplateField HeaderText="Mais informações">
+    <ItemTemplate>
+        <asp:Button 
+            ID="btnDetalhar"
+            runat="server"
+            Text="Detalhar"
+            CommandName="Detalhar"
+            CommandArgument='<%# Container.DataItemIndex %>'
+            CssClass="btn btn-primary btn-sm rounded-pill px-3" />
+    </ItemTemplate>
+</asp:TemplateField>
+
+    </Columns>
+</asp:GridView>
+</div>
+        <asp:Panel ID="pnlDetalhes" runat="server" Visible="false" CssClass="card mt-3 p-3">
+
+    <h4>Detalhes do Projeto</h4>
+
+    <p><strong>Título:</strong> <asp:Label ID="lblTitulo" runat="server" /></p>
+
+    <p><strong>Verba:</strong> <asp:Label ID="lblVerba" runat="server" /></p>
+
+    <p><strong>Valor da Bolsa:</strong> <asp:Label ID="lblBolsa" runat="server" /></p>
+
+    <p><strong>Área:</strong> <asp:Label ID="lblArea" runat="server" /></p>
+
+    <p><strong>Coordenador:</strong> <asp:Label ID="lblCoordenador" runat="server" /></p>
+
+    <p><strong>Bolsistas:</strong></p>
+
+    <asp:BulletedList ID="bltBolsistas" runat="server"></asp:BulletedList>
+
+    <asp:Button
+        ID="btnFecharDetalhes"
+        runat="server"
+        Text="Fechar"
+        CssClass="btn btn-outline-secondary rounded-pill px-4"
+        OnClick="btnFecharDetalhes_Click" />
+</asp:Panel>
 </div>
 </div>
 </asp:Content>

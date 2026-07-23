@@ -13,7 +13,7 @@ namespace WebApplication1
         public decimal ValorDaBolsa { get; set; }
         public string AreaDeConhecimento { get; set; }
         public Coordenador coordenador{ get; set; }
-        public List<Bolsista> Bolsista { get; set; }
+        public List<Bolsista> Bolsista { get; set; } = new List<Bolsista>();
         
         //inicialize a lista dos bolsistas!
     }

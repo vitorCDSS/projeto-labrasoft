@@ -38,6 +38,12 @@ namespace WebApplication1
         {
             try
             {
+                if (Repositorio.listaCoordenador.Any(x => x.CPF == txtcpf.Text))
+                {
+                    lblMensagem.Text = $"CPF inválido, já esta em uso.";
+                    lblMensagem.ForeColor = System.Drawing.Color.Red;
+                    return;
+                }
                 Coordenador coordenador = new Coordenador();
 
                 coordenador.Nome = txtnome.Text;

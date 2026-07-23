@@ -25,11 +25,10 @@ namespace WebApplication1
             ddlcoordenador.DataBind();
             ddlcoordenador.Items.Insert(0, new ListItem("selecione o coordenador", ""));
             
-            lstBolsistas.DataSource = Repositorio.listaBolsista;
+            lstBolsistas.DataSource = Repositorio.ObterBolsistas();
             lstBolsistas.DataTextField = "Nome";
             lstBolsistas.DataValueField = "CPF";
             lstBolsistas.DataBind();
-            //lstBolsistas.Items.Insert(0, new ListItem("selecione os bolsistas", ""));
             if (Repositorio.listaProjetos.Count > 0)
             {
                 gvProjetos.DataSource = Repositorio.listaProjetos;
@@ -49,38 +48,56 @@ namespace WebApplication1
 
             try
             {
-                Projeto projeto = new Projeto();
-
-                projeto.Titulo = txttitulo.Text;
-
-                projeto.VerbaAprovada = decimal.Parse (txtverba.Text);
-                projeto.ValorDaBolsa = decimal.Parse(txtvalor.Text);
-                //pesquisar um metódo que garanta a escrita de apenas números!
-                projeto.AreaDeConhecimento = txtarea.Text;
                 string CPFcord = ddlcoordenador.SelectedValue;
-                projeto.coordenador = Repositorio.listaCoordenador.FirstOrDefault(c => c.CPF == CPFcord);
-                string CPFbol = lstBolsistas.SelectedValue;
+                if (Repositorio.listaProjetos.Any(x => x.coordenador.CPF == CPFcord))
+                {
+                    lblMensagem.Text = $"coordenador já está vinculado a outro projeto.";
+                    lblMensagem.ForeColor = System.Drawing.Color.Red;
+                    return;
+                }
                 foreach (ListItem item in lstBolsistas.Items)
                 {
                     if (item.Selected)
                     {
-                        Bolsista bolsista = Repositorio.listaBolsista
-                            .FirstOrDefault(b => b.CPF == item.Value);
+                        bool bolsistaJaCadastrado = Repositorio.listaProjetos.Any(p =>
+                            p.Bolsista.Any(b => b.CPF == item.Value));
 
-                        if (bolsista != null)
+                        if (bolsistaJaCadastrado)
                         {
-                            projeto.Bolsista.Add(bolsista);
+                            lblMensagem.Text = "Um dos bolsistas selecionados já está vinculado a outro projeto.";
+                            lblMensagem.ForeColor = System.Drawing.Color.Red;
+                            return;
                         }
                     }
                 }
-                Repositorio.listaProjetos.Add(projeto);
-                Mostrar_Lista();
+                Projeto projeto = new Projeto();
 
-                lblMensagem.Text = $"salvo com sucesso";
-                lblMensagem.ForeColor = System.Drawing.Color.DarkGreen;
-                Limpar();
-                Response.Redirect("CadastroProjeto.aspx");
+                    projeto.Titulo = txttitulo.Text;
 
+                    projeto.VerbaAprovada = decimal.Parse(txtverba.Text);
+                    projeto.ValorDaBolsa = decimal.Parse(txtvalor.Text);
+                    projeto.AreaDeConhecimento = txtarea.Text;
+                    projeto.coordenador = Repositorio.listaCoordenador.FirstOrDefault(c => c.CPF == CPFcord);
+                    string CPFbol = lstBolsistas.SelectedValue;
+                    foreach (ListItem item in lstBolsistas.Items)
+                    {
+                        if (item.Selected)
+                        {
+                            Bolsista bolsista = Repositorio.ObterBolsistas()
+                                .FirstOrDefault(b => b.CPF == item.Value);
+
+                            if (bolsista != null)
+                            {
+                                projeto.Bolsista.Add(bolsista);
+                            }
+                        }
+                    }
+                    Repositorio.listaProjetos.Add(projeto);
+                    Mostrar_Lista();
+                    lblMensagem.Text = $"salvo com sucesso";
+                    lblMensagem.ForeColor = System.Drawing.Color.DarkGreen;
+                    Limpar();
+                    Response.Redirect("CadastroProjeto.aspx");
             }
             catch (Exception)
             {
@@ -104,13 +121,20 @@ namespace WebApplication1
         {
             Limpar();
         }
-
-        protected void Btn_Filtrar(object sender, EventArgs e)
+        protected void Btn_FiltrarProjeto(object sender, EventArgs e)
         {
-            gvProjetos.DataSource = Repositorio.listaProjetos.Where(x => x.AreaDeConhecimento == "ADS").ToList();
+            string filtro = txtFiltroProjeto.Text.Trim().ToLower();
+
+            var resultado = Repositorio.listaProjetos.Where(x =>
+                x.Titulo.ToLower().Contains(filtro) ||
+                x.AreaDeConhecimento.ToLower().Contains(filtro) ||
+                x.coordenador.Nome.ToLower().Contains(filtro)
+            ).ToList();
+
+
+            gvProjetos.DataSource = resultado;
             gvProjetos.DataBind();
         }
-
         protected void Btn_Ordenar(object sender, EventArgs e)
         {
             gvProjetos.DataSource = Repositorio.listaProjetos.OrderBy(x => x.Titulo).ToList();
@@ -120,6 +144,35 @@ namespace WebApplication1
         {
             gvProjetos.DataSource = Repositorio.listaProjetos;
             gvProjetos.DataBind();
+        }
+        protected void gvProjetos_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Detalhar")
+            {
+                int indice = Convert.ToInt32(e.CommandArgument);
+
+                Projeto projeto = Repositorio.listaProjetos[indice];
+
+                lblTitulo.Text = projeto.Titulo;
+                lblVerba.Text = projeto.VerbaAprovada.ToString("C");
+                lblBolsa.Text = projeto.ValorDaBolsa.ToString("C");
+                lblArea.Text = projeto.AreaDeConhecimento;
+
+                lblCoordenador.Text = projeto.coordenador.Nome;
+
+                bltBolsistas.Items.Clear();
+
+                foreach (Bolsista b in projeto.Bolsista)
+                {
+                    bltBolsistas.Items.Add(b.Nome);
+                }
+
+                pnlDetalhes.Visible = true;
+            }
+        }
+        protected void btnFecharDetalhes_Click(object sender, EventArgs e)
+        {
+            pnlDetalhes.Visible = false;
         }
     }
 }

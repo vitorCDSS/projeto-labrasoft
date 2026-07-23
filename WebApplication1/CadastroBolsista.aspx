@@ -1,107 +1,280 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CadastroBolsista.aspx.cs" Inherits="WebApplication1.CadastroBolsista" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="container mt-5">
-    
-    <div class="card shadow-sm border-2">
-        <div class="card-header border-3 bg-primary text-white">
-            <h3 class="mb-3">Cadastro bolsista (Semana 1)</h3>
+
+<div class="container mt-5">
+
+
+    <!-- CARD CADASTRO -->
+    <div class="card shadow-lg border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white rounded-top-4">
+            <h3 class="mb-0">
+                <i class="bi bi-person-plus"></i>
+                Cadastro de Bolsista
+            </h3>
         </div>
-        
+
+
         <div class="card-body bg-light">
-            <h5 class="card-title text-muted mb-3">Preencha suas informações:</h5>
+
+            <h5 class="card-title text-muted mb-3">
+                Informações do bolsista:
+            </h5>
+
             <hr />
-            
+
+
             <div class="form-group mb-3">
-                <label class="form-label font-weight-bold">
-                    nome
+                <label class="form-label fw-bold">
+                    Nome
                 </label>
-                <asp:TextBox ID="txtnome" runat="server" CssClass="form-control" placeholder="digite seu nome">
+
+                <asp:TextBox 
+                    ID="txtnome" 
+                    runat="server"
+                    CssClass="form-control"
+                    placeholder="Digite seu nome">
                 </asp:TextBox>
             </div>
 
+
+
             <div class="form-group mb-3">
-                <label class="form-label font-weight-bold">
-                    cpf
+
+                <label class="form-label fw-bold">
+                    CPF
                 </label>
-                <asp:TextBox ID="txtcpf" runat="server" CssClass="form-control" placeholder="digite seu cpf">
+
+                <asp:TextBox 
+                    ID="txtcpf"
+                    runat="server"
+                    CssClass="form-control"
+                    placeholder="Digite seu CPF">
                 </asp:TextBox>
+
             </div>
 
+
+
             <div class="form-group mb-3">
-                <label class="form-label font-weight-bold">
-                    matrícula
+
+                <label class="form-label fw-bold">
+                    Matrícula
                 </label>
-                <asp:TextBox ID="txtmatricula" runat="server" CssClass="form-control" placeholder="sua matrícula">
+
+                <asp:TextBox 
+                    ID="txtmatricula"
+                    runat="server"
+                    CssClass="form-control"
+                    placeholder="Digite sua matrícula">
                 </asp:TextBox>
+
             </div>
 
+
+
             <div class="form-group mb-3">
-                <label class="form-label font-weight-bold">
-                    data de nascimento
+
+                <label class="form-label fw-bold">
+                    Data de nascimento
                 </label>
-                <asp:TextBox ID="txtdata" runat="server" TextMode="Date" CssClass="form-control" placeholder="data de nascimento">
+
+                <asp:TextBox
+                    ID="txtdata"
+                    runat="server"
+                    TextMode="Date"
+                    CssClass="form-control">
                 </asp:TextBox>
+
             </div>
-               
+
+
+
             <div class="form-group mb-3">
-                <label class="form-group font-weight-bold">
-                    sexo
+
+                <label class="form-label fw-bold">
+                    Sexo
                 </label>
-                <asp:DropDownList ID="ddlSexo" runat="server" CssClass="form-control">
-                     <asp:ListItem Text="selecione seu genero" Value="">
 
-                     </asp:ListItem>
+                <asp:DropDownList 
+                    ID="ddlSexo"
+                    runat="server"
+                    CssClass="form-control">
 
-                    <asp:ListItem Text="masculino" Value="Masculino">
+                    <asp:ListItem Text="Selecione seu gênero" Value=""></asp:ListItem>
 
-                    </asp:ListItem>
+                    <asp:ListItem Text="Masculino" Value="M"></asp:ListItem>
 
-                    <asp:ListItem Text="feminino" Value="Feminino">
+                    <asp:ListItem Text="Feminino" Value="F"></asp:ListItem>
 
-                    </asp:ListItem>
+                    <asp:ListItem Text="Outro" Value="O"></asp:ListItem>
 
-                    <asp:ListItem Text="outro" Value="Outro">
-
-                    </asp:ListItem>
                 </asp:DropDownList>
-            </div>
-            <hr />
-            <div class="mb-3 d-grid gap-2">
-                <asp:Button ID="btn_salvar" runat="server" CssClass="btn btn-success btn-lg w-100" Text="concluir" OnClick="Btn_salvar" />
-                <asp:Button ID="btn_limpar" runat="server" CssClass="btn btn-lg w-100" Style="background-color:#cc6666; border-color:#cc6666; color:white;" Text="desfazer formulário" OnClick="Btn_Limpar" />
-            </div>
-            
-            
-        </div>
-     
-    </div>   
-                        <asp:Label ID="lblMensagem" runat="server" CssClass="h6">
-</asp:Label>
-          <div class="mt-5">
-                
-    <div class="card-body bg-ligth mb-3 d-grid gap-2">
-    <h3 class="card-title text-dark mb-3">bolsistas já cadastrados:</h3>
-    </div>
-              <asp:Panel runat="server" ID="botoes">
-                  <div class="d-flex gap-2">
-                      <asp:Button ID="btn_filtrar" runat="server" CssClass="btn btn-ligth btn-lg w-100 border border-secondary border-2" Text="filtrar" OnClick="Btn_Filtrar" />
-                      <asp:Button ID="btn_ordenar" runat="server" CssClass="btn btn_ligth btn-lg w-100 border border-secondary border-2" Text="ordem alfabetica" OnClick="Btn_Ordenar" />
-                  </div>
-                  
-                  <asp:Button ID="btn_desfazer_alteracoes" runat="server" CssClass="btn btn-secondary btn-lg w-100 mt-3" Style="background-color:#cc6666; border-color:#cc6666; color:white" Text="desfazer alterações" OnClick="Btn_Desfazer_Alteracoes" />
 
-              </asp:Panel>
-              
-              <hr />
-    <div class="table-responsive shadow rounded">
-        <asp:GridView ID="gvAlunos" runat="server"
-            AutoGenerateColumns="true"
-            CssClass="table table-striped table-hover table-bordered mb-0 align-middle">
-        </asp:GridView>
+            </div>
+
+
+
+            <hr />
+
+
+            <div class="mb-3 d-grid gap-2">
+
+                <asp:Button 
+                    ID="btn_salvar"
+                    runat="server"
+                    CssClass="btn btn-success btn-lg rounded-3 shadow-sm"
+                    Text="Concluir cadastro"
+                    OnClick="Btn_salvar" />
+
+
+                <asp:Button
+                    ID="btn_limpar"
+                    runat="server"
+                    CssClass="btn btn-danger btn-lg rounded-3 shadow-sm"
+                    Text="Desfazer formulário"
+                    OnClick="Btn_Limpar" />
+
+            </div>
+
+
+        </div>
+
     </div>
-    
+
+
+
+    <asp:Label 
+        ID="lblMensagem"
+        runat="server"
+        CssClass="h6">
+    </asp:Label>
+
+
+
+    <!-- ÁREA DA LISTA -->
+
+    <div class="mt-5">
+
+
+        <asp:Panel 
+            ID="botoes"
+            runat="server">
+
+
+            <div class="card shadow-sm border-0 rounded-4">
+
+
+                <div class="card-body bg-light">
+
+
+                    <h3 class="text-dark mb-4">
+                        Bolsistas cadastrados
+                    </h3>
+
+
+
+                    <!-- PESQUISA -->
+
+                    <div class="row align-items-end g-2 mb-3">
+
+
+                        <div class="col-md-9">
+
+                            <label class="form-label fw-bold">
+                                Buscar por nome ou matrícula
+                            </label>
+
+
+                            <asp:TextBox
+                                ID="txtFiltro"
+                                runat="server"
+                                CssClass="form-control"
+                                placeholder="Ex.: João, 2024001...">
+                            </asp:TextBox>
+
+
+                        </div>
+
+
+
+                        <div class="col-md-3 d-grid">
+
+
+                            <asp:Button
+                                ID="btn_filtrar"
+                                runat="server"
+                                CssClass="btn btn-primary"
+                                Text="🔍 Filtrar"
+                                OnClick="Btn_Filtrar" />
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <asp:Button
+                        ID="btn_ordenar"
+                        runat="server"
+                        CssClass="btn btn-outline-primary btn-lg w-100 mt-2"
+                        Text="Ordem alfabética"
+                        OnClick="Btn_Ordenar" />
+
+
+
+                    <asp:Button
+                        ID="btn_desfazer_alteracoes"
+                        runat="server"
+                        CssClass="btn btn-danger btn-lg w-100 mt-3"
+                        Text="Desfazer alterações"
+                        OnClick="Btn_Desfazer_Alteracoes" />
+
+
+
+                </div>
+
+
+            </div>
+
+
+        </asp:Panel>
+
+
+
+        <hr />
+
+
+
+        <!-- TABELA -->
+
+        <div class="table-responsive shadow rounded">
+
+
+            <asp:GridView 
+                ID="gvAlunos"
+                runat="server"
+                AutoGenerateColumns="true"
+                CssClass="table table-hover align-middle mt-3 shadow-sm"
+                HeaderStyle-CssClass="table-primary">
+
+
+            </asp:GridView>
+
+
+        </div>
+
+
+
+    </div>
+
+
 </div>
-</div>
+
 </asp:Content>

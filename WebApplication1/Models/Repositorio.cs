@@ -1,57 +1,71 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Configuration;
+using System.Data.SqlClient;
 using WebApplication1.Models;
 
 namespace WebApplication1
 {
     public class Repositorio
     {
-       
-        public static List<Bolsista> listaBolsista = new List<Bolsista>()
+        // Pega a string de conexão configurada no Web.config
+        private static string connectionString = ConfigurationManager.ConnectionStrings["LabrasoftConnection"].ConnectionString;
+
+        // Método para BUSCAR todos os bolsistas do banco de dados
+        public static List<Bolsista> ObterBolsistas()
         {
-            new Bolsista
+            List<Bolsista> lista = new List<Bolsista>();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-               Nome = "Ana Beatriz Souza",
-                CPF = "123.456.789-01",
-                Matricula = "2024001",
-                DataNascimento = new DateTime(2002, 3, 15),
-                Sexo = "Feminino"
-            },
-            new Bolsista
-            {
-                Nome = "Bruno Henrique Lima",
-                CPF = "234.567.890-12",
-               Matricula = "2024002",
-               DataNascimento = new DateTime(2001, 7, 22),
-                Sexo = "Masculino"
-            },
-            new Bolsista
-           {
-                 Nome = "Carla Mendes Oliveira",
-                 CPF = "345.678.901-23",
-                 Matricula = "2024003",
-                 DataNascimento = new DateTime(2003, 1, 10),
-                Sexo = "Feminino"
-             },
-            new Bolsista
-            {
-                Nome = "Diego Santos Ferreira",
-                CPF = "456.789.012-34",
-                Matricula = "2024004",
-                DataNascimento = new DateTime(2000, 11, 5),
-                Sexo = "Masculino"
-            },
-            new Bolsista
-            {
-                Nome = "Eduarda Costa Almeida",
-                CPF = "567.890.123-45",
-                Matricula = "2024005",
-                DataNascimento = new DateTime(2002, 9, 28),
-                Sexo = "Feminino"
+                string query = "SELECT Nome, Matricula, CPF, Sexo, DataNascimento FROM dbo.Bolsista";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Bolsista b = new Bolsista();                           
+                            b.Nome = reader["Nome"].ToString();
+                            b.Matricula = reader["Matricula"].ToString();
+                            b.CPF = reader["CPF"].ToString();
+                            b.Sexo = reader["Sexo"].ToString();
+                            b.DataNascimento = Convert.ToDateTime(reader["DataNascimento"]);                            
+
+                            lista.Add(b);
+                        }
+                    }
+                }
             }
-        };
+
+            return lista;
+        }
+
+        // Método para SALVAR um bolsista diretamente no banco de dados
+        public static void AdicionarBolsista(Bolsista bolsista)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = @"INSERT INTO dbo.Bolsista (Nome, Matricula, CPF, Sexo, DataNascimento) 
+                                VALUES (@Nome, @Matricula, @CPF, @Sexo, @DataNascimento)";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Nome", bolsista.Nome);
+                    cmd.Parameters.AddWithValue("@Matricula", bolsista.Matricula);
+                    cmd.Parameters.AddWithValue("@CPF", bolsista.CPF);
+                    cmd.Parameters.AddWithValue("@Sexo", bolsista.Sexo);
+                    cmd.Parameters.AddWithValue("@DataNascimento", bolsista.DataNascimento);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+
         public static List<Coordenador> listaCoordenador = new List<Coordenador>()
             {
             new Coordenador
@@ -96,5 +110,6 @@ namespace WebApplication1
             }
         };
         public static List<Projeto> listaProjetos = new List<Projeto>();
+        
     }
 }
