@@ -100,14 +100,6 @@ namespace WebApplication1
                 AreaDeAtuação = "adsadasd",
                 Email = "email.com.br",
             },
-            new Coordenador
-            {
-                Nome = "Eduarda Costa Almeida",
-                CPF = "567.890.123-45",
-                Titulação = "2024005",
-                AreaDeAtuação = "adsadasd",
-                Email = "email.com.br",
-            }
         };
         public static List<Projeto> listaProjetos = new List<Projeto>();
         
