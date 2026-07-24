@@ -50,12 +50,13 @@ namespace WebApplication1
             try
             {
                 string CPFcord = ddlcoordenador.SelectedValue;
-                Repositorio.ObterProjetos().Any(x => x.coordenador.CPF == CPFcord);
+                if(Repositorio.ObterProjetos().Any(x => x.coordenador.CPF == CPFcord))
                 {
                     lblMensagem.Text = $"coordenador já está vinculado a outro projeto.";
                     lblMensagem.ForeColor = System.Drawing.Color.Red;
                     return;
                 }
+
                 foreach (ListItem item in lstBolsistas.Items)
                 {
                     if (item.Selected)
@@ -71,6 +72,7 @@ namespace WebApplication1
                         }
                     }
                 }
+
                 Projeto projeto = new Projeto();
 
                     projeto.Titulo = txttitulo.Text;
