@@ -20,7 +20,6 @@ namespace WebApplication1
 
         protected void Mostrar_Lista()
         {
-            // Busca a lista atualizada direto do banco de dados
             List<Bolsista> lista = Repositorio.ObterBolsistas();
 
             if (lista != null && lista.Count > 0)
@@ -49,20 +48,16 @@ namespace WebApplication1
                 aluno.DataNascimento = DateTime.Parse(txtdata.Text);
                 aluno.Sexo = ddlSexo.SelectedValue;
 
-                // 1. Salva diretamente no Banco de Dados
                 Repositorio.AdicionarBolsista(aluno);
 
-                // 2. Atualiza a tabela na tela
                 Mostrar_Lista();
 
-                // 3. Monta e exibe a mensagem de sucesso
                 string salvo = aluno.ObterResumo();
                 int idade = aluno.CalcularIdade();
 
                 lblMensagem.Text = $"Salvo com sucesso! {salvo} - Idade: {idade} anos.";
                 lblMensagem.ForeColor = System.Drawing.Color.DarkGreen;
 
-                // 4. Limpa os campos do formulário (sem dar Redirect para não sumir a mensagem)
                 Limpar();
             }
             catch (Exception ex)
@@ -84,12 +79,11 @@ namespace WebApplication1
         protected void Btn_Limpar(object sender, EventArgs e)
         {
             Limpar();
-            lblMensagem.Text = ""; // Opcional: limpa a mensagem ao clicar em Limpar
+            lblMensagem.Text = ""; 
         }
 
         protected void Btn_Filtrar(object sender, EventArgs e)
         {
-            // Busca do banco e filtra
             var listaFiltrada = Repositorio.ObterBolsistas()
                                            .Where(x => x.Sexo == "Feminino")
                                            .ToList();
@@ -100,7 +94,6 @@ namespace WebApplication1
 
         protected void Btn_Ordenar(object sender, EventArgs e)
         {
-            // Busca do banco e ordena
             var listaOrdenada = Repositorio.ObterBolsistas()
                                            .OrderBy(x => x.Nome)
                                            .ToList();
@@ -111,7 +104,6 @@ namespace WebApplication1
 
         protected void Btn_Desfazer_Alteracoes(object sender, EventArgs e)
         {
-            // Recarrega os dados originais do banco de dados
             Mostrar_Lista();
         }
     }

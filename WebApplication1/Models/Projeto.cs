@@ -10,8 +10,8 @@ namespace WebApplication1
     {
         public string Titulo { get; set; }
         public decimal VerbaAprovada { get; set; }
-        public decimal ValorDaBolsa { get; set; }
-        public string AreaDeConhecimento { get; set; }
+        public decimal ValorBolsaIndividual { get; set; }
+        public string AreaConhecimento { get; set; }
         public Coordenador coordenador{ get; set; }
         public List<Bolsista> Bolsista { get; set; } = new List<Bolsista>();
         

@@ -66,42 +66,104 @@ namespace WebApplication1
         }
 
 
-        public static List<Coordenador> listaCoordenador = new List<Coordenador>()
+        public static List<Coordenador> ObterCoordenadores()
+        {
+            List<Coordenador> lista = new List<Coordenador>();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-            new Coordenador
+                string query = "SELECT Nome, CPF, Titulacao, AreaAtuacao, Email FROM dbo.Coordenador";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Coordenador b = new Coordenador();
+                            b.Nome = reader["Nome"].ToString();                            
+                            b.CPF = reader["CPF"].ToString();
+                            b.Titulacao = reader["Titulacao"].ToString();
+                            b.AreaAtuacao = reader["AreaAtuacao"].ToString();
+                            b.Email = reader["Email"].ToString();
+                            lista.Add(b);
+                        }
+                    }
+                }
+            }
+
+            return lista;
+        }
+
+        public static void AdicionarCoordenador(Coordenador coordenador)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-               Nome = "Ana Beatriz Souza",
-                CPF = "123.456.789-01",
-                Titulação = "2024001",
-                AreaDeAtuação = "adsadasd",
-                Email = "email.com.br",
-            },
-            new Coordenador
+                string query = @"INSERT INTO dbo.Coordenador (Nome, CPF, Titulacao, AreaAtuacao, Email) 
+                                VALUES (@Nome, @CPF, @Titulacao, @AreaAtuacao, @Email)";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Nome", coordenador.Nome);                    
+                    cmd.Parameters.AddWithValue("@CPF", coordenador.CPF);
+                    cmd.Parameters.AddWithValue("@Titulacao", coordenador.Titulacao);
+                    cmd.Parameters.AddWithValue("@AreaAtuacao", coordenador.AreaAtuacao);
+                    cmd.Parameters.AddWithValue("@Email", coordenador.Email);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public static List<Projeto> ObterProjetos()
+        {
+            List<Projeto> lista = new List<Projeto>();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-                Nome = "Bruno Henrique Lima",
-                CPF = "234.567.890-12",
-               Titulação = "2024002",
-               AreaDeAtuação = "adsadasd",
-                Email = "email.com.br",
-            },
-            new Coordenador
-           {
-                 Nome = "Carla Mendes Oliveira",
-                 CPF = "345.678.901-23",
-                 Titulação = "2024003",
-                 AreaDeAtuação = "adsadasd",
-                Email = "email.com.br",
-             },
-            new Coordenador
+                string query = "SELECT Titulo, VerbaAprovada, ValorBolsaIndividual, AreaConhecimento FROM dbo.Projeto";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Projeto b = new Projeto();
+                            b.Titulo = reader["Titulo"].ToString();
+                            b.VerbaAprovada = Convert.ToDecimal(reader["VerbaAprovada"]);
+                            b.ValorBolsaIndividual = Convert.ToDecimal(reader["ValorBolsaIndividual"]);
+                            b.AreaConhecimento = reader["AreaConhecimento"].ToString();
+                            lista.Add(b);
+                        }
+                    }
+                }
+            }
+
+            return lista;
+        }
+
+        public static void AdicionarProjeto(Projeto projeto)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-                Nome = "Diego Santos Ferreira",
-                CPF = "456.789.012-34",
-                Titulação = "2024004",
-                AreaDeAtuação = "adsadasd",
-                Email = "email.com.br",
-            },
-        };
-        public static List<Projeto> listaProjetos = new List<Projeto>();
-        
+                string query = @"INSERT INTO dbo.Projeto (Titulo, VerbaAprovada, ValorBolsaIndividual, AreaConhecimento) 
+                                VALUES (@Titulo, @VerbaAprovada, @ValorBolsaIndividual, @AreaConhecimento)";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Titulo", projeto.Titulo);
+                    cmd.Parameters.AddWithValue("@VerbaAprovada", projeto.VerbaAprovada);
+                    cmd.Parameters.AddWithValue("@ValorBolsaIndividual", projeto.ValorBolsaIndividual);
+                    cmd.Parameters.AddWithValue("@AreaConhecimento", projeto.AreaConhecimento);
+                    
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

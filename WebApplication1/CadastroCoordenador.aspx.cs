@@ -20,9 +20,11 @@ namespace WebApplication1
         
         protected void Mostrar_Lista()
         {
-            if (Repositorio.listaCoordenador.Count > 0)
+            List<Coordenador> lista = Repositorio.ObterCoordenadores();
+
+            if (lista != null && lista.Count > 0)
             {
-                gvcoordenador.DataSource = Repositorio.listaCoordenador;
+                gvcoordenador.DataSource = lista;
                 gvcoordenador.DataBind();
                 gvcoordenador.Visible = true;
                 botoes.Visible = true;
@@ -38,7 +40,7 @@ namespace WebApplication1
         {
             try
             {
-                if (Repositorio.listaCoordenador.Any(x => x.CPF == txtcpf.Text))
+                if (Repositorio.ObterCoordenadores().Any(x => x.CPF == txtcpf.Text))
                 {
                     lblMensagem.Text = $"CPF inválido, já esta em uso.";
                     lblMensagem.ForeColor = System.Drawing.Color.Red;
@@ -48,16 +50,15 @@ namespace WebApplication1
 
                 coordenador.Nome = txtnome.Text;
                 coordenador.CPF = txtcpf.Text;
-                coordenador.Titulação = ddltitulacao.SelectedValue;
-                coordenador.AreaDeAtuação = txtareadeatuacao.Text;
+                coordenador.Titulacao = ddltitulacao.SelectedValue;
+                coordenador.AreaAtuacao = txtareadeatuacao.Text;
                 coordenador.Email = txtemail.Text;
-                Repositorio.listaCoordenador.Add(coordenador);
+                Repositorio.AdicionarCoordenador(coordenador);
                 Mostrar_Lista();
 
                 lblMensagem.Text = $"salvo com sucesso";
                 lblMensagem.ForeColor = System.Drawing.Color.DarkGreen;
                 Limpar();
-
             }
             catch (Exception)
             {
@@ -87,10 +88,10 @@ namespace WebApplication1
         {
             string filtro = txtFiltro.Text.Trim();
 
-            var resultado = Repositorio.listaCoordenador.Where(x =>
-                 x.Nome.Contains(filtro) ||
-                 x.Titulação.Contains(filtro)
-             ).ToList();
+            var resultado = Repositorio.ObterCoordenadores()
+                .Where(x => x.Nome.Contains(filtro) ||
+                            x.Titulacao.Contains(filtro))
+                .ToList();
 
             gvcoordenador.DataSource = resultado;
             gvcoordenador.DataBind();

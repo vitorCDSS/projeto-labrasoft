@@ -19,7 +19,7 @@ namespace WebApplication1
         }
         protected void Mostrar_Lista()
         {
-            ddlcoordenador.DataSource = Repositorio.listaCoordenador;
+            ddlcoordenador.DataSource = Repositorio.ObterCoordenadores();
             ddlcoordenador.DataTextField = "Nome";
             ddlcoordenador.DataValueField = "CPF";            
             ddlcoordenador.DataBind();
@@ -29,9 +29,10 @@ namespace WebApplication1
             lstBolsistas.DataTextField = "Nome";
             lstBolsistas.DataValueField = "CPF";
             lstBolsistas.DataBind();
-            if (Repositorio.listaProjetos.Count > 0)
+            var lista = Repositorio.ObterProjetos();
+            if (lista.Count > 0)
             {
-                gvProjetos.DataSource = Repositorio.listaProjetos;
+                gvProjetos.DataSource = lista;
                 gvProjetos.DataBind();
                 gvProjetos.Visible = true;
                 botoes.Visible = true;                
@@ -49,7 +50,7 @@ namespace WebApplication1
             try
             {
                 string CPFcord = ddlcoordenador.SelectedValue;
-                if (Repositorio.listaProjetos.Any(x => x.coordenador.CPF == CPFcord))
+                Repositorio.ObterProjetos().Any(x => x.coordenador.CPF == CPFcord);
                 {
                     lblMensagem.Text = $"coordenador já está vinculado a outro projeto.";
                     lblMensagem.ForeColor = System.Drawing.Color.Red;
@@ -59,7 +60,7 @@ namespace WebApplication1
                 {
                     if (item.Selected)
                     {
-                        bool bolsistaJaCadastrado = Repositorio.listaProjetos.Any(p =>
+                        bool bolsistaJaCadastrado = Repositorio.ObterProjetos().Any(p =>
                             p.Bolsista.Any(b => b.CPF == item.Value));
 
                         if (bolsistaJaCadastrado)
@@ -75,10 +76,12 @@ namespace WebApplication1
                     projeto.Titulo = txttitulo.Text;
 
                     projeto.VerbaAprovada = decimal.Parse(txtverba.Text);
-                    projeto.ValorDaBolsa = decimal.Parse(txtvalor.Text);
-                    projeto.AreaDeConhecimento = txtarea.Text;
-                    projeto.coordenador = Repositorio.listaCoordenador.FirstOrDefault(c => c.CPF == CPFcord);
-                    string CPFbol = lstBolsistas.SelectedValue;
+                    projeto.ValorBolsaIndividual = decimal.Parse(txtvalor.Text);
+                    projeto.AreaConhecimento = txtarea.Text;
+                    projeto.coordenador =
+                        Repositorio.ObterCoordenadores()
+                                   .FirstOrDefault(c => c.CPF == CPFcord);
+                string CPFbol = lstBolsistas.SelectedValue;
                     foreach (ListItem item in lstBolsistas.Items)
                     {
                         if (item.Selected)
@@ -92,7 +95,7 @@ namespace WebApplication1
                             }
                         }
                     }
-                    Repositorio.listaProjetos.Add(projeto);
+                    Repositorio.ObterProjetos().Add(projeto);
                     Mostrar_Lista();
                     lblMensagem.Text = $"salvo com sucesso";
                     lblMensagem.ForeColor = System.Drawing.Color.DarkGreen;
@@ -125,9 +128,9 @@ namespace WebApplication1
         {
             string filtro = txtFiltroProjeto.Text.Trim().ToLower();
 
-            var resultado = Repositorio.listaProjetos.Where(x =>
+            var resultado = Repositorio.ObterProjetos().Where(x =>
                 x.Titulo.ToLower().Contains(filtro) ||
-                x.AreaDeConhecimento.ToLower().Contains(filtro) ||
+                x.AreaConhecimento.ToLower().Contains(filtro) ||
                 x.coordenador.Nome.ToLower().Contains(filtro)
             ).ToList();
 
@@ -137,12 +140,12 @@ namespace WebApplication1
         }
         protected void Btn_Ordenar(object sender, EventArgs e)
         {
-            gvProjetos.DataSource = Repositorio.listaProjetos.OrderBy(x => x.Titulo).ToList();
+            gvProjetos.DataSource = Repositorio.ObterProjetos().OrderBy(x => x.Titulo).ToList();
             gvProjetos.DataBind();
         }
         protected void Btn_Desfazer_Alteracoes(object sender, EventArgs e)
         {
-            gvProjetos.DataSource = Repositorio.listaProjetos;
+            gvProjetos.DataSource = Repositorio.ObterProjetos();
             gvProjetos.DataBind();
         }
         protected void gvProjetos_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -151,12 +154,12 @@ namespace WebApplication1
             {
                 int indice = Convert.ToInt32(e.CommandArgument);
 
-                Projeto projeto = Repositorio.listaProjetos[indice];
+                Projeto projeto = Repositorio.ObterProjetos()[indice];
 
                 lblTitulo.Text = projeto.Titulo;
                 lblVerba.Text = projeto.VerbaAprovada.ToString("C");
-                lblBolsa.Text = projeto.ValorDaBolsa.ToString("C");
-                lblArea.Text = projeto.AreaDeConhecimento;
+                lblBolsa.Text = projeto.ValorBolsaIndividual.ToString("C");
+                lblArea.Text = projeto.AreaConhecimento;
 
                 lblCoordenador.Text = projeto.coordenador.Nome;
 
