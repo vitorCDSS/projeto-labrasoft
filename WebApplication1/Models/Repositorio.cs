@@ -122,7 +122,11 @@ namespace WebApplication1
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string query = "SELECT Titulo, VerbaAprovada, ValorBolsaIndividual, AreaConhecimento FROM dbo.Projeto";
+                string query = @"SELECT p.ID, p.Titulo, p.VerbaAprovada, p.ValorBolsaIndividual, 
+                                 p.AreaConhecimento, p.CoordenadorID,
+                                 c.Nome AS CoordenadorNome, c.Email AS CoordenadorEmail
+                          FROM dbo.Projeto p
+                          JOIN dbo.Coordenador c ON c.ID = p.CoordenadorID";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -136,6 +140,12 @@ namespace WebApplication1
                             b.VerbaAprovada = Convert.ToDecimal(reader["VerbaAprovada"]);
                             b.ValorBolsaIndividual = Convert.ToDecimal(reader["ValorBolsaIndividual"]);
                             b.AreaConhecimento = reader["AreaConhecimento"].ToString();
+                            b.CoordenadorID = Convert.ToInt32(reader["CoordenadorID"]);
+
+                            b.coordenador = new Coordenador();
+                            b.coordenador.Nome = reader["CoordenadorNome"].ToString();
+                            b.coordenador.Email = reader["CoordenadorEmail"].ToString();
+
                             lista.Add(b);
                         }
                     }
@@ -149,8 +159,8 @@ namespace WebApplication1
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string query = @"INSERT INTO dbo.Projeto (Titulo, VerbaAprovada, ValorBolsaIndividual, AreaConhecimento) 
-                                VALUES (@Titulo, @VerbaAprovada, @ValorBolsaIndividual, @AreaConhecimento)";
+                string query = @"INSERT INTO dbo.Projeto (Titulo, VerbaAprovada, ValorBolsaIndividual, AreaConhecimento, CoordenadorID) 
+                        VALUES (@Titulo, @VerbaAprovada, @ValorBolsaIndividual, @AreaConhecimento, @CoordenadorID)";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -158,7 +168,58 @@ namespace WebApplication1
                     cmd.Parameters.AddWithValue("@VerbaAprovada", projeto.VerbaAprovada);
                     cmd.Parameters.AddWithValue("@ValorBolsaIndividual", projeto.ValorBolsaIndividual);
                     cmd.Parameters.AddWithValue("@AreaConhecimento", projeto.AreaConhecimento);
-                    
+                    cmd.Parameters.AddWithValue("@CoordenadorID", projeto.CoordenadorID);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static List<Despesas> ObterDespesas()
+        {
+            List<Despesas> lista = new List<Despesas>();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = "SELECT ID, Descricao, Valor, Categoria, ProjetoId FROM dbo.Despesas";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Despesas d = new Despesas();
+                            d.ID = Convert.ToInt32(reader["ID"]);
+                            d.Descricao = reader["Descricao"].ToString();
+                            d.Valor = Convert.ToDecimal(reader["Valor"]);
+                            d.Categoria = reader["Categoria"].ToString();
+                            d.ProjetoID = Convert.ToInt32(reader["ProjetoId"]);
+
+                            lista.Add(d);
+                        }
+                    }
+                }
+            }
+
+            return lista;
+        }
+
+        public static void AdicionarDespesa(Despesas despesa)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = @"INSERT INTO dbo.Despesas (Descricao, Valor, Categoria, ProjetoId) 
+                        VALUES (@Descricao, @Valor, @Categoria, @ProjetoId)";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Descricao", despesa.Descricao);
+                    cmd.Parameters.AddWithValue("@Valor", despesa.Valor);
+                    cmd.Parameters.AddWithValue("@Categoria", despesa.Categoria);
+                    cmd.Parameters.AddWithValue("@ProjetoId", despesa.ProjetoID);
 
                     con.Open();
                     cmd.ExecuteNonQuery();

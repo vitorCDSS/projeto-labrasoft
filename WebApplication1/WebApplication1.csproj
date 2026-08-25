@@ -70,6 +70,7 @@
     <Content Include="BolsistaExemplo.aspx" />
     <Content Include="CadastroBolsista.aspx" />
     <Content Include="CadastroCoordenador.aspx" />
+    <Content Include="CadastroDespesa.aspx" />
     <Content Include="CadastroProjeto.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web\Formulario.html" />
@@ -96,6 +97,13 @@
     <Compile Include="CadastroCoordenador.aspx.designer.cs">
       <DependentUpon>CadastroCoordenador.aspx</DependentUpon>
     </Compile>
+    <Compile Include="CadastroDespesa.aspx.cs">
+      <DependentUpon>CadastroDespesa.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CadastroDespesa.aspx.designer.cs">
+      <DependentUpon>CadastroDespesa.aspx</DependentUpon>
+    </Compile>
     <Compile Include="CadastroProjeto.aspx.cs">
       <DependentUpon>CadastroProjeto.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -103,6 +111,7 @@
     <Compile Include="CadastroProjeto.aspx.designer.cs">
       <DependentUpon>CadastroProjeto.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Despesas.cs" />
     <Compile Include="Models\Coordenador.cs" />
     <Compile Include="Models\Bolsista.cs" />
     <Compile Include="Models\Projeto.cs" />

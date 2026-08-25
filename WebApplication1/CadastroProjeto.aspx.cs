@@ -21,7 +21,7 @@ namespace WebApplication1
         {
             ddlcoordenador.DataSource = Repositorio.ObterCoordenadores();
             ddlcoordenador.DataTextField = "Nome";
-            ddlcoordenador.DataValueField = "CPF";            
+ddlcoordenador.DataValueField = "ID";            
             ddlcoordenador.DataBind();
             ddlcoordenador.Items.Insert(0, new ListItem("selecione o coordenador", ""));
             

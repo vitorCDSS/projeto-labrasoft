@@ -7,6 +7,8 @@ namespace WebApplication1
 {
     public class Coordenador
     {
+        public int ID { get; set; }
+
         public string Nome { get; set; }
 
         public string CPF { get; set; }

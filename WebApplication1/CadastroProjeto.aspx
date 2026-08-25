@@ -157,8 +157,8 @@
 
         <asp:BoundField DataField="Titulo" HeaderText="Título" />
         <asp:BoundField DataField="VerbaAprovada" HeaderText="Verba Aprovada" />
-        <asp:BoundField DataField="ValorDaBolsa" HeaderText="Valor da Bolsa" />
-        <asp:BoundField DataField="AreaDeConhecimento" HeaderText="Área" />
+        <asp:BoundField DataField="ValorBolsaIndividual" HeaderText="Valor da Bolsa" />
+        <asp:BoundField DataField="AreaConhecimento" HeaderText="Área" />
 
         <asp:TemplateField HeaderText="Mais informações">
     <ItemTemplate>

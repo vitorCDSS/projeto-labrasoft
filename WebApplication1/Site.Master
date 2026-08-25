@@ -26,9 +26,13 @@
              <a href="CadastroCoordenador.aspx">
                  cadastro de coordenadores
              </a>
-              | 
+             | 
              <a href="CadastroProjeto.aspx">
                  projetos
+             </a>
+             | 
+             <a href="CadastroDespesa.aspx">
+                 despesas
              </a>
           
         </nav>
