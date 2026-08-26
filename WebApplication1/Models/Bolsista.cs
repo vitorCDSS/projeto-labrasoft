@@ -13,6 +13,7 @@ namespace WebApplication1.Models
         public DateTime DataNascimento { get; set; }
 
         public string Sexo { get; set; }
+        public int? ProjetoID { get; set; }
 
         public string ObterResumo()
         {

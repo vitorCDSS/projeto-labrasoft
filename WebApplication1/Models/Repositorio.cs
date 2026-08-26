@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Linq;
 using WebApplication1.Models;
 
 namespace WebApplication1
@@ -18,7 +19,7 @@ namespace WebApplication1
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string query = "SELECT Nome, Matricula, CPF, Sexo, DataNascimento FROM dbo.Bolsista";
+                string query = "SELECT Nome, Matricula, CPF, Sexo, DataNascimento, ProjetoID FROM dbo.Bolsista";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -27,12 +28,13 @@ namespace WebApplication1
                     {
                         while (reader.Read())
                         {
-                            Bolsista b = new Bolsista();                           
+                            Bolsista b = new Bolsista();
                             b.Nome = reader["Nome"].ToString();
                             b.Matricula = reader["Matricula"].ToString();
                             b.CPF = reader["CPF"].ToString();
                             b.Sexo = reader["Sexo"].ToString();
-                            b.DataNascimento = Convert.ToDateTime(reader["DataNascimento"]);                            
+                            b.DataNascimento = Convert.ToDateTime(reader["DataNascimento"]);
+                            b.ProjetoID = reader["ProjetoID"] == DBNull.Value ? (int?)null : Convert.ToInt32(reader["ProjetoID"]);
 
                             lista.Add(b);
                         }
@@ -72,7 +74,7 @@ namespace WebApplication1
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string query = "SELECT Nome, CPF, Titulacao, AreaAtuacao, Email FROM dbo.Coordenador";
+                string query = "SELECT ID, Nome, CPF, Titulacao, AreaAtuacao, Email FROM dbo.Coordenador";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -82,7 +84,8 @@ namespace WebApplication1
                         while (reader.Read())
                         {
                             Coordenador b = new Coordenador();
-                            b.Nome = reader["Nome"].ToString();                            
+                            b.ID = Convert.ToInt32(reader["ID"]); // <-- adicionado
+                            b.Nome = reader["Nome"].ToString();
                             b.CPF = reader["CPF"].ToString();
                             b.Titulacao = reader["Titulacao"].ToString();
                             b.AreaAtuacao = reader["AreaAtuacao"].ToString();
@@ -116,17 +119,46 @@ namespace WebApplication1
                 }
             }
         }
+
+        public static void AtualizarCoordenador(string cpfOriginal, Coordenador coordenador)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = @"UPDATE dbo.Coordenador 
+                          SET Nome = @Nome, 
+                              CPF = @CPF, 
+                              Titulacao = @Titulacao, 
+                              AreaAtuacao = @AreaAtuacao, 
+                              Email = @Email
+                          WHERE CPF = @CpfOriginal";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Nome", coordenador.Nome);
+                    cmd.Parameters.AddWithValue("@CPF", coordenador.CPF);
+                    cmd.Parameters.AddWithValue("@Titulacao", coordenador.Titulacao);
+                    cmd.Parameters.AddWithValue("@AreaAtuacao", coordenador.AreaAtuacao);
+                    cmd.Parameters.AddWithValue("@Email", coordenador.Email);
+                    cmd.Parameters.AddWithValue("@CpfOriginal", cpfOriginal);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public static List<Projeto> ObterProjetos()
         {
             List<Projeto> lista = new List<Projeto>();
+            List<Bolsista> todosBolsistas = ObterBolsistas(); // já traz ProjetoID de cada um
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string query = @"SELECT p.ID, p.Titulo, p.VerbaAprovada, p.ValorBolsaIndividual, 
-                                 p.AreaConhecimento, p.CoordenadorID,
-                                 c.Nome AS CoordenadorNome, c.Email AS CoordenadorEmail
-                          FROM dbo.Projeto p
-                          JOIN dbo.Coordenador c ON c.ID = p.CoordenadorID";
+                         p.AreaConhecimento, p.CoordenadorID,
+                         c.Nome AS CoordenadorNome, c.Email AS CoordenadorEmail
+                  FROM dbo.Projeto p
+                  JOIN dbo.Coordenador c ON c.ID = p.CoordenadorID";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -136,6 +168,7 @@ namespace WebApplication1
                         while (reader.Read())
                         {
                             Projeto b = new Projeto();
+                            b.ID = Convert.ToInt32(reader["ID"]);
                             b.Titulo = reader["Titulo"].ToString();
                             b.VerbaAprovada = Convert.ToDecimal(reader["VerbaAprovada"]);
                             b.ValorBolsaIndividual = Convert.ToDecimal(reader["ValorBolsaIndividual"]);
@@ -146,6 +179,8 @@ namespace WebApplication1
                             b.coordenador.Nome = reader["CoordenadorNome"].ToString();
                             b.coordenador.Email = reader["CoordenadorEmail"].ToString();
 
+                            b.Bolsista = todosBolsistas.Where(x => x.ProjetoID == b.ID).ToList();
+
                             lista.Add(b);
                         }
                     }
@@ -155,12 +190,13 @@ namespace WebApplication1
             return lista;
         }
 
-        public static void AdicionarProjeto(Projeto projeto)
+        public static int AdicionarProjeto(Projeto projeto)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string query = @"INSERT INTO dbo.Projeto (Titulo, VerbaAprovada, ValorBolsaIndividual, AreaConhecimento, CoordenadorID) 
-                        VALUES (@Titulo, @VerbaAprovada, @ValorBolsaIndividual, @AreaConhecimento, @CoordenadorID)";
+                OUTPUT INSERTED.ID
+                VALUES (@Titulo, @VerbaAprovada, @ValorBolsaIndividual, @AreaConhecimento, @CoordenadorID)";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -169,6 +205,23 @@ namespace WebApplication1
                     cmd.Parameters.AddWithValue("@ValorBolsaIndividual", projeto.ValorBolsaIndividual);
                     cmd.Parameters.AddWithValue("@AreaConhecimento", projeto.AreaConhecimento);
                     cmd.Parameters.AddWithValue("@CoordenadorID", projeto.CoordenadorID);
+
+                    con.Open();
+                    return (int)cmd.ExecuteScalar(); // retorna o ID gerado pelo banco
+                }
+            }
+        }
+
+        public static void VincularBolsistaAoProjeto(string cpfBolsista, int projetoId)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = "UPDATE dbo.Bolsista SET ProjetoID = @ProjetoID WHERE CPF = @CPF";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@ProjetoID", projetoId);
+                    cmd.Parameters.AddWithValue("@CPF", cpfBolsista);
 
                     con.Open();
                     cmd.ExecuteNonQuery();

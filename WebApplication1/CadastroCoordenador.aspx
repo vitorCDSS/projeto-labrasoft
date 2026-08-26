@@ -242,13 +242,84 @@
         <asp:GridView
             ID="gvcoordenador"
             runat="server"
-            AutoGenerateColumns="true"
+            AutoGenerateColumns="false"
+            OnRowCommand="gvcoordenador_RowCommand"
             CssClass="table table-hover align-middle mt-3 shadow-sm"
             HeaderStyle-CssClass="table-primary">
 
+                <Columns>
+
+                    <asp:BoundField DataField="Nome" HeaderText="Nome" />
+                    <asp:BoundField DataField="CPF" HeaderText="CPF" />
+                    <asp:BoundField DataField="Titulacao" HeaderText="Titulacao" />
+                    <asp:BoundField DataField="AreaAtuacao" HeaderText="AreaAtuacao" />
+                    <asp:BoundField DataField="Email" HeaderText="Email" />
+
+                    <asp:TemplateField HeaderText="editar coordenador">
+                        <ItemTemplate>
+                            <asp:Button 
+                                ID="btnEditar"
+                                runat="server"
+                                Text="Editar"
+                                CommandName="Editar"
+                                CommandArgument="<%# Container.DataItemIndex %>"
+                                CssClass="btn btn-primary btn-sm rounded-pill px-3" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                </Columns>
 
         </asp:GridView>
 
+                        <asp:Panel ID="pnlEditar" runat="server" Visible="false" CssClass="card mt-3 p-3">
+
+            <asp:HiddenField ID="hfCpfOriginal" runat="server" />
+
+            <div class="form-group mb-3">
+                <label class="form-label font-weight-bold">Nome</label>
+                <asp:TextBox ID="txtEditNome" runat="server" CssClass="form-control"></asp:TextBox>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label font-weight-bold">CPF</label>
+                <asp:TextBox ID="txtEditCpf" runat="server" CssClass="form-control"></asp:TextBox>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label font-weight-bold">Titulação</label>
+                <asp:DropDownList ID="ddlEditTitulacao" runat="server" CssClass="form-control">
+                    <asp:ListItem Text="Graduação" Value="Graduação" />
+                    <asp:ListItem Text="Especialização" Value="Especialização" />
+                    <asp:ListItem Text="Mestrado" Value="Mestrado" />
+                    <asp:ListItem Text="Doutorado" Value="Doutorado" />
+                    <asp:ListItem Text="Pós-Doutorado" Value="Pós-Doutorado" />
+                </asp:DropDownList>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label font-weight-bold">Área de atuação</label>
+                <asp:TextBox ID="txtEditArea" runat="server" CssClass="form-control"></asp:TextBox>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label font-weight-bold">Email</label>
+                <asp:TextBox ID="txtEditEmail" runat="server" CssClass="form-control"></asp:TextBox>
+            </div>
+
+            <asp:Button
+                ID="btnFinalizarEdicao"
+                runat="server"
+                Text="Finalizar edição"
+                OnClick="btnFinalizarEdicao_Click"
+                CssClass="btn btn-outline-secondary rounded-pill px-4 mb-3" />
+
+            <asp:Button
+                ID="btnDesfazerEdicao"
+                runat="server"
+                Text="Desfazer edição"
+                OnClick="btnDesfazerEdicao_Click"
+                CssClass="btn btn-outline-danger rounded-pill px-4" />
+        </asp:Panel>
 
     </div>
 

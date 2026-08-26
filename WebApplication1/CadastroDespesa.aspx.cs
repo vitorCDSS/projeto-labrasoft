@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -92,6 +94,52 @@ namespace WebApplication1
                 .ToList();
             gvdespesas.DataSource = resultado;
             gvdespesas.DataBind();
+        }
+
+        public static List<Despesas> ObterDespesas()
+        {
+            var lista = new List<Despesas>();
+            string connStr = ConfigurationManager.ConnectionStrings["labrasoftT2"].ConnectionString;
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                string sql = "SELECT ID, Descricao, Valor, Categoria, ProjetoID FROM dbo.Despesas";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                conn.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lista.Add(new Despesas
+                        {
+                            ID = (int)reader["ID"],
+                            Descricao = reader["Descricao"].ToString(),
+                            Valor = (decimal)reader["Valor"],
+                            Categoria = reader["Categoria"].ToString(),
+                            ProjetoID = (int)reader["ProjetoID"]
+                        });
+                    }
+                }
+            }
+            return lista;
+        }
+
+        public static void AdicionarDespesa(Despesas despesa)
+        {
+            string connStr = ConfigurationManager.ConnectionStrings["labrasoftT2"].ConnectionString;
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                string sql = @"INSERT INTO dbo.Despesas (Descricao, Valor, Categoria, ProjetoID)
+                        VALUES (@Descricao, @Valor, @Categoria, @ProjetoID)";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@Descricao", despesa.Descricao);
+                cmd.Parameters.AddWithValue("@Valor", despesa.Valor);
+                cmd.Parameters.AddWithValue("@Categoria", despesa.Categoria);
+                cmd.Parameters.AddWithValue("@ProjetoID", despesa.ProjetoID);
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 }

@@ -96,5 +96,65 @@ namespace WebApplication1
             gvcoordenador.DataSource = resultado;
             gvcoordenador.DataBind();
         }
+
+        protected void gvcoordenador_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Editar")
+            {
+                int indice = Convert.ToInt32(e.CommandArgument);
+                Coordenador coordenador = Repositorio.ObterCoordenadores()[indice];
+
+                hfCpfOriginal.Value = coordenador.CPF;
+                txtEditNome.Text = coordenador.Nome;
+                txtEditCpf.Text = coordenador.CPF;
+
+                string titulacao = coordenador.Titulacao?.Trim();
+                if (ddlEditTitulacao.Items.FindByValue(titulacao) != null)
+                {
+                    ddlEditTitulacao.SelectedValue = titulacao;
+                }
+                else
+                {
+                    ddlEditTitulacao.SelectedIndex = 0;
+                }
+
+                txtEditArea.Text = coordenador.AreaAtuacao;
+                txtEditEmail.Text = coordenador.Email;
+
+                pnlEditar.Visible = true;
+            }
+        }
+
+        protected void btnFinalizarEdicao_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Coordenador coordenadorAtualizado = new Coordenador();
+                coordenadorAtualizado.Nome = txtEditNome.Text;
+                coordenadorAtualizado.CPF = txtEditCpf.Text;
+                coordenadorAtualizado.Titulacao = ddlEditTitulacao.SelectedValue;
+                coordenadorAtualizado.AreaAtuacao = txtEditArea.Text;
+                coordenadorAtualizado.Email = txtEditEmail.Text;
+
+                Repositorio.AtualizarCoordenador(hfCpfOriginal.Value, coordenadorAtualizado);
+
+                pnlEditar.Visible = false;
+                Mostrar_Lista();
+
+                lblMensagem.Text = "atualizado com sucesso";
+                lblMensagem.ForeColor = System.Drawing.Color.DarkGreen;
+            }
+            catch (Exception)
+            {
+                lblMensagem.Text = "erro ao atualizar";
+                lblMensagem.ForeColor = System.Drawing.Color.Red;
+            }
+        }
+
+        protected void btnDesfazerEdicao_Click(object sender, EventArgs e)
+        {
+            pnlEditar.Visible = false;
+            Mostrar_Lista();
+        }
     }
 }

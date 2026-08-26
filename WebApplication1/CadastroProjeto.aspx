@@ -161,6 +161,7 @@
         <asp:BoundField DataField="AreaConhecimento" HeaderText="Área" />
 
         <asp:TemplateField HeaderText="Mais informações">
+
     <ItemTemplate>
         <asp:Button 
             ID="btnDetalhar"
@@ -170,6 +171,17 @@
             CommandArgument='<%# Container.DataItemIndex %>'
             CssClass="btn btn-primary btn-sm rounded-pill px-3" />
     </ItemTemplate>
+
+</asp:TemplateField>
+
+        <asp:TemplateField HeaderText="edições">
+                <ItemTemplate>
+<asp:Button 
+    ID="btnSelecionarBolsistas"
+    runat="server"
+    Text="selecionar bolsistas"
+    CssClass="btn btn-primary btn-sm rounded-pill px-3" />
+        </ItemTemplate>
 </asp:TemplateField>
 
     </Columns>
@@ -184,6 +196,10 @@
     <p><strong>Verba:</strong> <asp:Label ID="lblVerba" runat="server" /></p>
 
     <p><strong>Valor da Bolsa:</strong> <asp:Label ID="lblBolsa" runat="server" /></p>
+
+    <p><strong>Despesas:</strong></p>
+
+    <asp:BulletedList ID="bltDespesas" runat="server"></asp:BulletedList>
 
     <p><strong>Área:</strong> <asp:Label ID="lblArea" runat="server" /></p>
 

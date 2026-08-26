@@ -8,6 +8,7 @@ namespace WebApplication1
 {
     public class Projeto
     {
+        public int ID { get; set; }
         public int CoordenadorID { get; set; }
         public string Titulo { get; set; }
         public decimal VerbaAprovada { get; set; }
