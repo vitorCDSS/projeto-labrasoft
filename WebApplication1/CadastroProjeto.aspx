@@ -173,17 +173,7 @@
     </ItemTemplate>
 
 </asp:TemplateField>
-
-        <asp:TemplateField HeaderText="edições">
-                <ItemTemplate>
-<asp:Button 
-    ID="btnSelecionarBolsistas"
-    runat="server"
-    Text="selecionar bolsistas"
-    CssClass="btn btn-primary btn-sm rounded-pill px-3" />
-        </ItemTemplate>
-</asp:TemplateField>
-
+                
     </Columns>
 </asp:GridView>
 </div>
@@ -207,7 +197,87 @@
 
     <p><strong>Bolsistas:</strong></p>
 
-    <asp:BulletedList ID="bltBolsistas" runat="server"></asp:BulletedList>
+<asp:BulletedList 
+    ID="bltBolsistas" 
+    runat="server">
+</asp:BulletedList>
+
+<asp:Panel ID="pnlSelecionarBolsistas" runat="server" Visible="false">
+
+    <hr />
+
+    <p>
+        <strong>Selecione os bolsistas do projeto:</strong>
+    </p>
+
+    <asp:ListBox
+        ID="lstBolsistasEdicao"
+        runat="server"
+        CssClass="form-control"
+        SelectionMode="Multiple"
+        Rows="8">
+    </asp:ListBox>
+
+<%--    <asp:GridView ID="bosistascadastrados"
+        runat="server"
+        AutoGenerateColumns="false"
+        CssClass="table-responsive table-hover align-middle mt-3 shadow-sm"
+        HeaderStyle-CssClass="table-light">
+
+         <Columns>
+
+     <asp:BoundField DataField="Nome" HeaderText="Bolsista" />
+
+                     <asp:TemplateField HeaderText="situação">
+
+    <ItemTemplate>
+        <asp:Button 
+            ID="btnDeletarBolsista"
+            runat="server"
+            Text="Deletar"
+            CommandName="Detalhar"
+            CommandArgument='<%# Container.DataItemIndex %>'
+            CssClass="btn btn-danger btn-sm rounded-pill px-3" />
+    </ItemTemplate>
+
+</asp:TemplateField>
+                
+    </Columns>
+    </asp:GridView>
+
+    (criar gridview de bolsistas para substituir o listbox onde voce pode deletar bolsistas)
+    --%>
+
+    >
+
+    <small class="form-text text-muted">
+        Segure <strong>Ctrl</strong> para selecionar mais de um bolsista.
+    </small>
+
+    <br />
+
+    <asp:Button
+        ID="btnSalvarBolsistas"
+        runat="server"
+        Text="Salvar bolsistas"
+        CssClass="btn btn-success rounded-pill px-4 mb-2"
+        OnClick="btnSalvarBolsistas_Click" />
+
+    <asp:Button
+        ID="btnCancelarBolsistas"
+        runat="server"
+        Text="Cancelar"
+        CssClass="btn btn-outline-secondary rounded-pill px-4 mb-2"
+        OnClick="btnCancelarBolsistas_Click" />
+
+</asp:Panel>
+
+    <asp:Button 
+    ID="btnSelecionarBolsistas"
+    runat="server"
+    Text="Selecionar bolsistas"
+    CssClass="btn btn-primary btn-sm rounded-pill px-3 mb-3"
+    OnClick="btnSelecionarBolsistas_Click" />
 
     <asp:Button
         ID="btnFecharDetalhes"
@@ -216,6 +286,8 @@
         CssClass="btn btn-outline-secondary rounded-pill px-4"
         OnClick="btnFecharDetalhes_Click" />
 </asp:Panel>
+              <asp:HiddenField ID="hfProjetoID" runat="server" />
+
 </div>
 </div>
 </asp:Content>

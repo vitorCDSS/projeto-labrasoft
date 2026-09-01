@@ -16,7 +16,6 @@ namespace WebApplication1
         public string AreaConhecimento { get; set; }
         public Coordenador coordenador{ get; set; }
         public List<Bolsista> Bolsista { get; set; } = new List<Bolsista>();
-        
-        //inicialize a lista dos bolsistas!
+
     }
 }

@@ -229,6 +229,29 @@ namespace WebApplication1
             }
         }
 
+
+        public static void RemoverBolsistaDoProjeto(string cpfBolsista, int projetoId)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = @"UPDATE dbo.Bolsista 
+                         SET ProjetoID = NULL 
+                         WHERE CPF = @CPF 
+                         AND ProjetoID = @ProjetoID";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@CPF", cpfBolsista);
+                    cmd.Parameters.AddWithValue("@ProjetoID", projetoId);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+
         public static List<Despesas> ObterDespesas()
         {
             List<Despesas> lista = new List<Despesas>();
