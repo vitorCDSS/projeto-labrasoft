@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CadastroProjeto.aspx.cs" Inherits="WebApplication1.CadastroProjeto" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CadastroProjeto.aspx.cs" Inherits="WebApplication1.CadastroProjeto" MaintainScrollPositionOnPostBack="true"%>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -210,43 +210,40 @@
         <strong>Selecione os bolsistas do projeto:</strong>
     </p>
 
-    <asp:ListBox
-        ID="lstBolsistasEdicao"
-        runat="server"
-        CssClass="form-control"
-        SelectionMode="Multiple"
-        Rows="8">
-    </asp:ListBox>
+        <asp:GridView 
+    ID="gvBolsistas"
+    runat="server"
+    AutoGenerateColumns="false"
+    DataKeyNames="ID"
+    CssClass="table table-hover align-middle mt-3"
+    HeaderStyle-CssClass="table-primary"
+    OnRowCommand="gvBolsistas_RowCommand">
 
-<%--    <asp:GridView ID="bosistascadastrados"
-        runat="server"
-        AutoGenerateColumns="false"
-        CssClass="table-responsive table-hover align-middle mt-3 shadow-sm"
-        HeaderStyle-CssClass="table-light">
+    <Columns>
 
-         <Columns>
+        <asp:BoundField 
+            DataField="Nome" 
+            HeaderText="Bolsista" />
 
-     <asp:BoundField DataField="Nome" HeaderText="Bolsista" />
+        <asp:TemplateField HeaderText="Ação">
 
-                     <asp:TemplateField HeaderText="situação">
+            <ItemTemplate>
 
-    <ItemTemplate>
-        <asp:Button 
-            ID="btnDeletarBolsista"
-            runat="server"
-            Text="Deletar"
-            CommandName="Detalhar"
-            CommandArgument='<%# Container.DataItemIndex %>'
-            CssClass="btn btn-danger btn-sm rounded-pill px-3" />
-    </ItemTemplate>
+                <asp:Button
+                    ID="btnAlternar"
+                    runat="server"
+                    CommandName="Alternar"
+                    CommandArgument='<%# Container.DataItemIndex %>'
+                    Text='<%# ObterTextoBotao(Container.DataItem) %>'
+                    CssClass="btn btn-primary btn-sm rounded-pill px-3" />
 
-</asp:TemplateField>
-                
+            </ItemTemplate>
+
+        </asp:TemplateField>
+
     </Columns>
-    </asp:GridView>
 
-    (criar gridview de bolsistas para substituir o listbox onde voce pode deletar bolsistas)
-    --%>
+</asp:GridView>
 
     >
 
@@ -256,12 +253,12 @@
 
     <br />
 
-    <asp:Button
+    <%--<asp:Button
         ID="btnSalvarBolsistas"
         runat="server"
         Text="Salvar bolsistas"
         CssClass="btn btn-success rounded-pill px-4 mb-2"
-        OnClick="btnSalvarBolsistas_Click" />
+        OnClick="btnSalvarBolsistas_Click" />--%>
 
     <asp:Button
         ID="btnCancelarBolsistas"

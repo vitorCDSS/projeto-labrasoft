@@ -231,22 +231,13 @@ namespace WebApplication1
         protected global::System.Web.UI.WebControls.Panel pnlSelecionarBolsistas;
 
         /// <summary>
-        /// Controle lstBolsistasEdicao.
+        /// Controle gvBolsistas.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox lstBolsistasEdicao;
-
-        /// <summary>
-        /// Controle btnSalvarBolsistas.
-        /// </summary>
-        /// <remarks>
-        /// Campo gerado automaticamente.
-        /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSalvarBolsistas;
+        protected global::System.Web.UI.WebControls.GridView gvBolsistas;
 
         /// <summary>
         /// Controle btnCancelarBolsistas.

@@ -4,6 +4,7 @@ namespace WebApplication1.Models
 {
     public class Bolsista
     {
+        public int ID { get; set; }
         public string Nome { get; set; }
 
         public string CPF { get; set; }
@@ -13,6 +14,7 @@ namespace WebApplication1.Models
         public DateTime DataNascimento { get; set; }
 
         public string Sexo { get; set; }
+        
         public int? ProjetoID { get; set; }
 
         public string ObterResumo()

@@ -95,7 +95,7 @@ namespace WebApplication1
 
             gvcoordenador.DataSource = resultado;
             gvcoordenador.DataBind();
-        }
+        } //fazer isso soq pros bolsistas cadastrados
 
         protected void gvcoordenador_RowCommand(object sender, GridViewCommandEventArgs e)
         {
