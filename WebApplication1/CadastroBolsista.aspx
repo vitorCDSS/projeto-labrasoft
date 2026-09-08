@@ -260,11 +260,18 @@
             <asp:GridView 
                 ID="gvAlunos"
                 runat="server"
-                AutoGenerateColumns="true"
+                AutoGenerateColumns="False"
                 CssClass="table table-hover align-middle mt-3 shadow-sm"
                 HeaderStyle-CssClass="table-primary">
 
-
+            <Columns>
+                <asp:BoundField DataField="Nome" HeaderText="Nome" />
+                <asp:BoundField DataField="CPF" HeaderText="CPF" />
+                <asp:BoundField DataField="Matricula" HeaderText="Matrícula" />
+                <asp:BoundField DataField="DataNascimento" HeaderText="Data de Nascimento" />
+                <asp:BoundField DataField="Sexo" HeaderText="Sexo" />
+            </Columns>
+                
             </asp:GridView>
 
 

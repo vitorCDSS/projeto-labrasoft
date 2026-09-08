@@ -253,13 +253,6 @@
 
     <br />
 
-    <%--<asp:Button
-        ID="btnSalvarBolsistas"
-        runat="server"
-        Text="Salvar bolsistas"
-        CssClass="btn btn-success rounded-pill px-4 mb-2"
-        OnClick="btnSalvarBolsistas_Click" />--%>
-
     <asp:Button
         ID="btnCancelarBolsistas"
         runat="server"

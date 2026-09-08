@@ -35,6 +35,10 @@
              <a href="CadastroDespesa.aspx">
                  despesas
              </a>
+            | 
+            <a href="usuario.aspx">
+                usuario
+            </a>
           
         </nav>
         <div>

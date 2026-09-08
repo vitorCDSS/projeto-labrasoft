@@ -72,6 +72,7 @@
     <Content Include="CadastroCoordenador.aspx" />
     <Content Include="CadastroDespesa.aspx" />
     <Content Include="CadastroProjeto.aspx" />
+    <Content Include="usuario.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web\Formulario.html" />
   </ItemGroup>
@@ -123,6 +124,14 @@
     </Compile>
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Usuario.cs" />
+    <Compile Include="usuario.aspx.cs">
+      <DependentUpon>usuario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usuario.aspx.designer.cs">
+      <DependentUpon>usuario.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -9,10 +9,8 @@ namespace WebApplication1
 {
     public class Repositorio
     {
-        // Pega a string de conexão configurada no Web.config
         private static string connectionString = ConfigurationManager.ConnectionStrings["LabrasoftConnection"].ConnectionString;
 
-        // Método para BUSCAR todos os bolsistas do banco de dados
         public static List<Bolsista> ObterBolsistas()
         {
             List<Bolsista> lista = new List<Bolsista>();
@@ -40,7 +38,6 @@ namespace WebApplication1
                             b.Sexo = reader["Sexo"].ToString();
                             b.DataNascimento =
                                 Convert.ToDateTime(reader["DataNascimento"]);
-
                             lista.Add(b);
                         }
                     }
@@ -48,7 +45,6 @@ namespace WebApplication1
             }
 
             return lista;
-            //filtrar lista usando isso
         }
 
         public static void AdicionarBolsista(Bolsista bolsista)
@@ -250,6 +246,107 @@ namespace WebApplication1
             return lista;
         }
 
+        public static List<Bolsista> ObterBolsistasDisponiveis(int projetoId)
+        {
+            List<Bolsista> lista = new List<Bolsista>();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = @"
+            SELECT 
+                b.ID,
+                b.Nome,
+                b.Matricula,
+                b.CPF,
+                b.Sexo,
+                b.DataNascimento
+            FROM dbo.Bolsista b
+            WHERE NOT EXISTS
+            (
+                SELECT 1
+                FROM dbo.ProjetoBolsista pb
+                WHERE pb.BolsistaID = b.ID
+                AND pb.ProjetoID <> @ProjetoID
+            )";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@ProjetoID", projetoId);
+
+                    con.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Bolsista bolsista = new Bolsista();
+
+                            bolsista.ID = Convert.ToInt32(reader["ID"]);
+                            bolsista.Nome = reader["Nome"].ToString();
+                            bolsista.Matricula = reader["Matricula"].ToString();
+                            bolsista.CPF = reader["CPF"].ToString();
+                            bolsista.Sexo = reader["Sexo"].ToString();
+                            bolsista.DataNascimento =
+                                Convert.ToDateTime(reader["DataNascimento"]);
+
+                            lista.Add(bolsista);
+                        }
+                    }
+                }
+            }
+
+            return lista;
+        }
+
+        public static List<Bolsista> ObterBolsistasSemProjeto()
+        {
+            List<Bolsista> lista = new List<Bolsista>();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = @"
+            SELECT 
+                b.ID,
+                b.Nome,
+                b.Matricula,
+                b.CPF,
+                b.Sexo,
+                b.DataNascimento
+            FROM dbo.Bolsista b
+            WHERE NOT EXISTS
+            (
+                SELECT 1
+                FROM dbo.ProjetoBolsista pb
+                WHERE pb.BolsistaID = b.ID
+            )";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Bolsista bolsista = new Bolsista();
+
+                            bolsista.ID = Convert.ToInt32(reader["ID"]);
+                            bolsista.Nome = reader["Nome"].ToString();
+                            bolsista.Matricula = reader["Matricula"].ToString();
+                            bolsista.CPF = reader["CPF"].ToString();
+                            bolsista.Sexo = reader["Sexo"].ToString();
+                            bolsista.DataNascimento =
+                                Convert.ToDateTime(reader["DataNascimento"]);
+
+                            lista.Add(bolsista);
+                        }
+                    }
+                }
+            }
+
+            return lista;
+        }
+
         public static int AdicionarProjeto(Projeto projeto)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -407,5 +504,25 @@ namespace WebApplication1
                 }
             }
         }
+
+        public static void AdicionarUsuario(Usuario usuario)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = @"INSERT INTO dbo.Usuarios (Nome, Email, Senha) 
+                                VALUES (@Nome, @Email, @Senha)";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Nome", usuario.Nome);
+                    cmd.Parameters.AddWithValue("@Email", usuario.Email);
+                    cmd.Parameters.AddWithValue("@Senha", usuario.Senha);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
     }
 }
