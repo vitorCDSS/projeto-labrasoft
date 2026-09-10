@@ -509,7 +509,7 @@ namespace WebApplication1
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string query = @"INSERT INTO dbo.Usuarios (Nome, Email, Senha) 
+                string query = @"INSERT INTO dbo.Usuario (Nome, Email, Senha) 
                                 VALUES (@Nome, @Email, @Senha)";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
@@ -524,5 +524,59 @@ namespace WebApplication1
             }
         }
 
+        public static bool VerificarLogin(string email, string senha)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = @"
+            SELECT COUNT(*)
+            FROM dbo.Usuario
+            WHERE Email = @Email
+              AND Senha = @Senha";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    cmd.Parameters.AddWithValue("@Senha", senha);
+
+                    con.Open();
+
+                    int quantidade = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    return quantidade > 0;
+                }
+            }
+        }
+
+        //obtersenhadobanco busca pelo email e define a senha encontrada em senha do banco
+        //coloque esta senha do banco na função = BCrypt.Net.BCrypt.Verify(senhaDoBanco, txtsenha.Text);
+        //flip yourself in the thirty
+        public static string Obter_Senha_Do_Banco(string email)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = @"
+            SELECT Senha
+            FROM dbo.Usuario
+            WHERE Email = @Email";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Email", email);
+
+                    con.Open();
+
+                    object resultado = cmd.ExecuteScalar();
+
+                    if (resultado != null)
+                    {
+                        string senhaDoBanco = resultado.ToString();
+                        return senhaDoBanco;
+                    }
+
+                    return null;
+                }
+            }
+        }
     }
 }

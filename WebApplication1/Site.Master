@@ -15,32 +15,32 @@
             <hr />
         </header>
 
-        <nav>
-            <a href="BolsistaExemplo.aspx">
-                inicio
-            </a>
-             | 
-            <a href="CadastroBolsista.aspx">
-                cadastro de bolsistas
-            </a>
-             | 
-             <a href="CadastroCoordenador.aspx">
-                 cadastro de coordenadores
-             </a>
-             | 
-             <a href="CadastroProjeto.aspx">
-                 projetos
-             </a>
-             | 
-             <a href="CadastroDespesa.aspx">
-                 despesas
-             </a>
-            | 
-            <a href="usuario.aspx">
-                usuario
-            </a>
-          
-        </nav>
+        <asp:Panel ID="pnlMenu" runat="server">
+
+    <nav>
+
+        <a href="BolsistaExemplo.aspx">
+            inicio
+        </a>
+        |
+        <a href="CadastroBolsista.aspx">
+            cadastro de bolsistas
+        </a>
+        |
+        <a href="CadastroCoordenador.aspx">
+            cadastro de coordenadores
+        </a>
+        |
+        <a href="CadastroProjeto.aspx">
+            projetos
+        </a>
+        |
+        <a href="CadastroDespesa.aspx">
+            despesas
+        </a>
+    </nav>
+
+</asp:Panel>
         <div>
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
             </asp:ContentPlaceHolder>

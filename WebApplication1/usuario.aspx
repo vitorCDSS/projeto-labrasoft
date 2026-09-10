@@ -7,7 +7,6 @@
 
 <div class="container mt-5">
 
-```
 <div class="card shadow-lg border-0 rounded-4">
 
     <!-- CABEÇALHO -->
@@ -230,7 +229,6 @@
     </asp:Label>
 
 </div>
-```
 
 </div>
 

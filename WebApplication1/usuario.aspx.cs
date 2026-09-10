@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.UI;
 using WebApplication1.Models;
+using BCrypt.Net;
 
 namespace WebApplication1
 {
@@ -18,7 +19,7 @@ namespace WebApplication1
 
                 usuario.Nome = txtnomeusuario.Text;
                 usuario.Email = txtemail.Text;
-                usuario.Senha = txtsenha.Text;
+                usuario.Senha = BCrypt.Net.BCrypt.HashPassword(txtsenha.Text);
 
                 Repositorio.AdicionarUsuario(usuario);
 
@@ -55,7 +56,22 @@ namespace WebApplication1
 
         protected void Btn_Entrar(object sender, EventArgs e)
         {
-            // Aqui vamos verificar o e-mail e a senha no banco.
+            string email = txtEmailLogin.Text.Trim();
+            string senha = txtSenhaLogin.Text;
+
+            bool loginValido = Repositorio.VerificarLogin(email, senha);
+
+            if (loginValido)
+            {
+                lblMensagem.Text = "Login realizado com sucesso!";
+                lblMensagem.ForeColor = System.Drawing.Color.DarkGreen;
+                Response.Redirect("CadastroBolsista.aspx");
+            }
+            else
+            {
+                lblMensagem.Text = "E-mail ou senha incorretos.";
+                lblMensagem.ForeColor = System.Drawing.Color.Red;
+            }
         }
     }
 
